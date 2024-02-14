@@ -1,0 +1,5 @@
+rootProject.name = 'order-system-backend'
+include 'module-user-service'
+include 'module-product-service'
+include 'module-api-gateway'
+include 'module-eureka'
