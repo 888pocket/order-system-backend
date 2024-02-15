@@ -2,6 +2,7 @@ package com.joosangah.paymentservice.domain.entity;
 
 import com.joosangah.paymentservice.common.domain.AuditEntity;
 import com.joosangah.paymentservice.domain.enums.PaymentStatus;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -25,13 +26,33 @@ public class Payment extends AuditEntity {
     private Long userId;
     private Integer amount;
     @Enumerated(EnumType.STRING)
-    private PaymentStatus status;
+    @Column(nullable = false)
+    private PaymentStatus status = PaymentStatus.START;
 
     @Builder
-    public Payment(Long productId, Long userId, Integer amount, PaymentStatus status) {
+    public Payment(Long productId, Long userId, Integer amount) {
         this.productId = productId;
         this.userId = userId;
         this.amount = amount;
-        this.status = status;
+    }
+
+    public PaymentStatus getStatus() {
+        return status;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void success() {
+        this.status = PaymentStatus.SUCCESS;
+    }
+
+    public void fail() {
+        this.status = PaymentStatus.FAIL;
+    }
+
+    public void cancel() {
+        this.status = PaymentStatus.CANCEL;
     }
 }
