@@ -3,3 +3,5 @@ include 'module-user-service'
 include 'module-product-service'
 include 'module-api-gateway'
 include 'module-eureka'
+include 'module-payment-service'
+
