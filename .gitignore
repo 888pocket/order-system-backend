@@ -39,3 +39,4 @@ out/
 docker-compose.yml
 application.yml
 application-debug.yml
+application-test.yml
