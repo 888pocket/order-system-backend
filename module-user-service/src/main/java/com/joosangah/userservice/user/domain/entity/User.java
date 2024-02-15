@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -43,6 +45,7 @@ public class User extends AuditEntity implements UserDetails {
     @Column(name = "remember_token")
     private String rememberToken;
 
+    @Enumerated(EnumType.STRING)
     private ERole role;
 
     @Builder
