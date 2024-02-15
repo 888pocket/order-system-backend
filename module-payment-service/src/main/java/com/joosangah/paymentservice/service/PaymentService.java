@@ -69,4 +69,18 @@ public class PaymentService {
 
         return true;
     }
+
+    @Transactional
+    public void cancelPayment(User user, Long paymentId) {
+        Payment payment = loadPayment(paymentId);
+
+        if (!isUpdatable(user, payment)) {
+            throw new RuntimeException("can't cancel payment");
+        }
+
+        // TODO: 재고 복구
+
+        payment.cancel();
+        paymentRepository.save(payment);
+    }
 }
