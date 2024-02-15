@@ -34,4 +34,10 @@ public class PaymentController {
         User user = userFeignClient.getUser();
         paymentService.executePayment(user, paymentId);
     }
+
+    @PutMapping("/{paymentId}/cancel")
+    public void cancelPayment(@PathVariable Long paymentId) {
+        User user = userFeignClient.getUser();
+        paymentService.cancelPayment(user, paymentId);
+    }
 }
