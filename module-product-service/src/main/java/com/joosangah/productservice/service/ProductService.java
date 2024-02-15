@@ -22,7 +22,11 @@ public class ProductService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    public List<ProductResponse> loadProducts() {
+    public ProductResponse loadProductResponse(Long productId) {
+        return productResponseMapper.toDto(loadProduct(productId));
+    }
+
+    public List<ProductResponse> loadProductResponses() {
         return productResponseMapper.toDtoList(productRepository.findAll());
     }
 }
