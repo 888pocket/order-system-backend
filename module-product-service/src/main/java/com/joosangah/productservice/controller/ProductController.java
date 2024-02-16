@@ -35,7 +35,22 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}/stock")
-    public void updateStock(@PathVariable Long productId, @RequestBody ProductStockRequest request) {
+    public void updateStock(@PathVariable Long productId,
+            @RequestBody ProductStockRequest request) {
         productService.updateStock(productId, request.getStock());
+    }
+
+    @PutMapping("/{productId}/restore-stock")
+    public void restoreStock(@PathVariable Long productId,
+            @RequestBody ProductStockRequest request) {
+        productService.updateStock(productId,
+                productService.getStock(productId) + request.getStock());
+    }
+
+    @PutMapping("/{productId}/reduce-stock")
+    public void reduceStock(@PathVariable Long productId,
+            @RequestBody ProductStockRequest request) {
+        productService.updateStock(productId,
+                productService.getStock(productId) - request.getStock());
     }
 }

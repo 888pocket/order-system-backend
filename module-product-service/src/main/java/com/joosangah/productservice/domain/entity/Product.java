@@ -45,4 +45,8 @@ public class Product extends AuditEntity {
         this.openAt = openAt;
         this.stock = stock;
     }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
 }
