@@ -1,19 +1,25 @@
 package com.joosangah.paymentservice.service;
 
+import com.joosangah.paymentservice.common.client.ProductFeignService;
+import com.joosangah.paymentservice.common.domain.ProductResponse;
 import com.joosangah.paymentservice.common.domain.User;
 import com.joosangah.paymentservice.common.util.EventTrigger;
 import com.joosangah.paymentservice.domain.dto.request.PaymentRequest;
 import com.joosangah.paymentservice.domain.entity.Payment;
 import com.joosangah.paymentservice.domain.enums.PaymentStatus;
 import com.joosangah.paymentservice.repository.PaymentRepository;
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.impl.execchain.RequestAbortedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
+
+    private final ProductFeignService productFeignService;
 
     private final PaymentRepository paymentRepository;
 
@@ -29,17 +35,34 @@ public class PaymentService {
                 .userId(user.getId())
                 .amount(request.getAmount()).build();
 
+        productFeignService.reduceStock(payment.getProductId(), payment.getAmount());
         paymentRepository.save(payment);
+    }
+
+    public void validateProductForPurchase(Long productId, int stock)
+            throws RequestAbortedException {
+        ProductResponse product = productFeignService.getProduct(productId);
+        if (!hasEnoughStock(productId, stock)
+                || (product.getOpenAt() != null && product.getOpenAt()
+                .isAfter(LocalDateTime.now()))) {
+            throw new RequestAbortedException("Not purchasable");
+        }
+    }
+
+    public boolean hasEnoughStock(Long productId, int requiredStock) {
+        int stock = productFeignService.getStock(productId);
+
+        return requiredStock <= stock;
     }
 
     public void executePayment(User user, Long paymentId) {
         Payment payment = loadPayment(paymentId);
 
-        if (!isUpdatable(user, payment)) {
+        if (!isPaymentUpdatable(user, payment)) {
             throw new RuntimeException("can't execute payment");
         }
 
-        if(!tryRandomSuccess(user, payment)) {
+        if (!tryRandomSuccess(user, payment)) {
             throw new RuntimeException("failed");
         }
     }
@@ -51,7 +74,8 @@ public class PaymentService {
             payment.fail();
             paymentRepository.save(payment);
 
-            // TODO: 재고 복구
+            // 재고 복구
+            productFeignService.restoreStock(payment.getProductId(), payment.getAmount());
 
             return false;
         }
@@ -61,7 +85,7 @@ public class PaymentService {
         return true;
     }
 
-    private boolean isUpdatable(User user, Payment payment) {
+    private boolean isPaymentUpdatable(User user, Payment payment) {
         if (payment.getStatus() != PaymentStatus.START
                 || user.getId() != payment.getUserId()) {
             return false;
@@ -74,11 +98,12 @@ public class PaymentService {
     public void cancelPayment(User user, Long paymentId) {
         Payment payment = loadPayment(paymentId);
 
-        if (!isUpdatable(user, payment)) {
+        if (!isPaymentUpdatable(user, payment)) {
             throw new RuntimeException("can't cancel payment");
         }
 
-        // TODO: 재고 복구
+        // 재고 복구
+        productFeignService.restoreStock(payment.getProductId(), payment.getAmount());
 
         payment.cancel();
         paymentRepository.save(payment);

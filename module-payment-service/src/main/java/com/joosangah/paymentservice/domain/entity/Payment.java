@@ -40,8 +40,16 @@ public class Payment extends AuditEntity {
         return status;
     }
 
+    public Long getProductId() {
+        return productId;
+    }
+
     public Long getUserId() {
         return userId;
+    }
+
+    public Integer getAmount() {
+        return amount;
     }
 
     public void success() {
