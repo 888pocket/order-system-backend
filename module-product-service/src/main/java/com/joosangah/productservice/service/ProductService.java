@@ -41,6 +41,10 @@ public class ProductService {
     @Transactional
     @CachePut(value = "stock", key = "#productId")
     public int updateStock(Long productId, int newStock) {
+        Product product = loadProduct(productId);
+        product.setStock(newStock);
+        productRepository.save(product);
+
         return newStock;
     }
 }
