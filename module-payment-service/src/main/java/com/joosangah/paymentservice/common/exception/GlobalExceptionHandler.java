@@ -5,6 +5,7 @@ import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import org.apache.http.impl.execchain.RequestAbortedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -32,6 +33,14 @@ public class GlobalExceptionHandler {
         ExceptionResponse response = new ExceptionResponse(errorMessages.toString(),
                 status);
 
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ExceptionHandler(RequestAbortedException.class)
+    public ResponseEntity<Object> handleRequestAbortedException(RequestAbortedException e) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ExceptionResponse response = new ExceptionResponse(e.getMessage(),
+                status);
         return new ResponseEntity<>(response, status);
     }
 
