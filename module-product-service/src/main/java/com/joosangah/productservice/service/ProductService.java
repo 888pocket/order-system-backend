@@ -7,7 +7,10 @@ import com.joosangah.productservice.repository.ProductRepository;
 import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,5 +31,16 @@ public class ProductService {
 
     public List<ProductResponse> loadProductResponses() {
         return productResponseMapper.toDtoList(productRepository.findAll());
+    }
+
+    @Cacheable(value = "stock", key = "#productId")
+    public int getStock(Long productId) {
+        return loadProduct(productId).getStock();
+    }
+
+    @Transactional
+    @CachePut(value = "stock", key = "#productId")
+    public int updateStock(Long productId, int newStock) {
+        return newStock;
     }
 }
