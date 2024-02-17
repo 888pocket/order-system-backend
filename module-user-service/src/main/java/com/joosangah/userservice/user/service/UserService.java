@@ -14,23 +14,27 @@ import com.joosangah.userservice.user.domain.entity.VerificationToken;
 import com.joosangah.userservice.user.repository.UserRepository;
 import com.joosangah.userservice.user.repository.VerificationTokenRepository;
 import java.util.NoSuchElementException;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final VerificationTokenRepository verificationTokenRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private VerificationTokenRepository verificationTokenRepository;
 
-    private final FileService fileService;
-    private final MailService mailService;
+    @Autowired
+    private FileService fileService;
+    @Autowired
+    private MailService mailService;
 
-    private final WebSecurityConfig webSecurityConfig;
+    @Autowired
+    private WebSecurityConfig webSecurityConfig;
 
     public User loadUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(NoSuchElementException::new);

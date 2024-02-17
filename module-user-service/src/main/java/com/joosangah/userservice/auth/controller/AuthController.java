@@ -1,6 +1,5 @@
 package com.joosangah.userservice.auth.controller;
 
-import com.joosangah.userservice.auth.service.RefreshTokenService;
 import com.joosangah.userservice.auth.domain.entity.RefreshToken;
 import com.joosangah.userservice.auth.security.jwt.JwtUtils;
 import com.joosangah.userservice.auth.security.payload.request.LoginRequest;
@@ -8,10 +7,11 @@ import com.joosangah.userservice.auth.security.payload.request.TokenRefreshReque
 import com.joosangah.userservice.auth.security.payload.response.JwtResponse;
 import com.joosangah.userservice.auth.security.payload.response.TokenRefreshResponse;
 import com.joosangah.userservice.auth.service.BlackListService;
+import com.joosangah.userservice.auth.service.RefreshTokenService;
 import com.joosangah.userservice.common.exception.TokenRefreshException;
 import com.joosangah.userservice.user.domain.entity.User;
 import javax.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,16 +25,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/user/auth")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    private final JwtUtils jwtUtils;
+    @Autowired
+    private JwtUtils jwtUtils;
 
-    private final RefreshTokenService refreshTokenService;
-    private final BlackListService blackListService;
+    @Autowired
+    private RefreshTokenService refreshTokenService;
+    @Autowired
+    private BlackListService blackListService;
 
     @PostMapping("/public/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
