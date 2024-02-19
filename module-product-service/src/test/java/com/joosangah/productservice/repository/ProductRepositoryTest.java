@@ -24,7 +24,6 @@ class ProductRepositoryTest {
         for (int i = 0; i < 2; i++) {
             newProducts.add(Product.builder()
                     .name("(🔥)test product " + i)
-                    .stock(20)
                     .type(ProductType.HOT_DEAL)
                     .openAt(LocalDateTime.now().plusMinutes(10)).build());
         }
@@ -32,7 +31,6 @@ class ProductRepositoryTest {
         for (int i = 0; i < 8; i++) {
             newProducts.add(Product.builder()
                     .name("test product " + i)
-                    .stock(20)
                     .type(ProductType.DEFAULT).build());
         }
 

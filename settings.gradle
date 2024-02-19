@@ -4,4 +4,6 @@ include 'module-product-service'
 include 'module-api-gateway'
 include 'module-eureka'
 include 'module-payment-service'
+include 'module-stock-cache'
+include 'module-stock-service'
 
