@@ -35,18 +35,10 @@ public class Product extends AuditEntity {
 
     private LocalDateTime openAt;
 
-    @Column(nullable = false)
-    private Integer stock = 0;
-
     @Builder
-    public Product(String name, ProductType type, LocalDateTime openAt, Integer stock) {
+    public Product(String name, ProductType type, LocalDateTime openAt) {
         this.name = name;
         this.type = type;
         this.openAt = openAt;
-        this.stock = stock;
-    }
-
-    public void setStock(Integer stock) {
-        this.stock = stock;
     }
 }
