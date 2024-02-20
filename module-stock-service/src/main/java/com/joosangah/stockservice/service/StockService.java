@@ -40,7 +40,7 @@ public class StockService {
 
     @Transactional
     @CachePut(value = "stock", key = "#productId")
-    public int plusStock(Long productId, int difference) throws RequestAbortedException {
+    public int restoreStock(Long productId, int difference) throws RequestAbortedException {
         Stock stock = loadStock(productId);
         stock.plus(difference);
         if (stock.getStock() > stock.getInitStock()) {
@@ -53,7 +53,7 @@ public class StockService {
 
     @Transactional
     @CachePut(value = "stock", key = "#productId")
-    public int minusStock(Long productId, int difference) throws RequestAbortedException {
+    public int reduceStock(Long productId, int difference) throws RequestAbortedException {
         Stock stock = loadStock(productId);
         stock.minus(difference);
         if (stock.getStock() < 0) {

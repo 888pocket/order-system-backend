@@ -36,13 +36,13 @@ public class StockController {
     @PutMapping("/{productId}/restore")
     public void restoreStock(@PathVariable Long productId,
             @RequestBody StockRequest request) throws RequestAbortedException {
-        stockService.plusStock(productId, request.getStock());
+        stockService.restoreStock(productId, request.getStock());
     }
 
     @PutMapping("/{productId}/reduce")
     public void reduceStock(@PathVariable Long productId,
             @RequestBody StockRequest request) throws RequestAbortedException {
-        stockService.minusStock(productId,
+        stockService.reduceStock(productId,
                 request.getStock());
     }
 }
