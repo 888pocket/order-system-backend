@@ -6,9 +6,11 @@ import com.joosangah.productservice.domain.dto.response.ProductResponse;
 import com.joosangah.productservice.domain.entity.Product;
 import com.joosangah.productservice.mapper.ProductResponseMapper;
 import com.joosangah.productservice.repository.ProductRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.impl.execchain.RequestAbortedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,5 +48,13 @@ public class ProductService {
         stockFeignService.addStock(newProduct.getId(), request.getStock());
 
         return newProduct.getId();
+    }
+
+    public void validateProductForPurchase(Long productId) throws RequestAbortedException {
+        Product product = loadProduct(productId);
+        if(product.getOpenAt() != null && product.getOpenAt()
+                .isAfter(LocalDateTime.now())) {
+            throw new RequestAbortedException("Not purchasable");
+        }
     }
 }

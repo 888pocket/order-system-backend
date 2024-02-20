@@ -6,6 +6,7 @@ import com.joosangah.productservice.domain.dto.response.ProductResponse;
 import com.joosangah.productservice.service.ProductService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.impl.execchain.RequestAbortedException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,5 +35,11 @@ public class ProductController {
     @PostMapping
     public Long addProduct(@RequestBody ProductRequest request) {
         return productService.addProduct(request);
+    }
+
+    @GetMapping("/{productId}/validate")
+    public void validateProductForPurchase(@PathVariable Long productId)
+            throws RequestAbortedException {
+        productService.validateProductForPurchase(productId);
     }
 }

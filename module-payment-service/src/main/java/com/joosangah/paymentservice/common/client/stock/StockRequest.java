@@ -1,4 +1,4 @@
-package com.joosangah.paymentservice.common.domain;
+package com.joosangah.paymentservice.common.client.stock;
 
 import javax.validation.constraints.Min;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductStockRequest {
+public class StockRequest {
 
     @Min(0)
     private int stock;
