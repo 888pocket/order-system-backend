@@ -1,6 +1,6 @@
-package com.joosangah.paymentservice.common.client;
+package com.joosangah.paymentservice.common.client.user;
 
-import com.joosangah.paymentservice.common.domain.User;
+import com.joosangah.paymentservice.common.client.FeignClientConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
