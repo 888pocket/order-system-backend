@@ -1,7 +1,7 @@
 package com.joosangah.paymentservice.controller;
 
-import com.joosangah.paymentservice.common.client.UserFeignClient;
-import com.joosangah.paymentservice.common.domain.User;
+import com.joosangah.paymentservice.common.client.user.UserFeignClient;
+import com.joosangah.paymentservice.common.client.user.User;
 import com.joosangah.paymentservice.domain.dto.request.PaymentRequest;
 import com.joosangah.paymentservice.service.PaymentService;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +25,6 @@ public class PaymentController {
     @PostMapping("/start")
     public void startPayment(@RequestBody PaymentRequest request) throws RequestAbortedException {
         User user = userFeignClient.getUser();
-        // 재고, 오픈 일정 체크
-        paymentService.validateProductForPurchase(request.getProductId(), request.getAmount());
 
         paymentService.startPayment(user, request);
     }
