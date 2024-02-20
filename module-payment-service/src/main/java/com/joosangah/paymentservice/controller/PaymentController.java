@@ -23,10 +23,10 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping("/start")
-    public void startPayment(@RequestBody PaymentRequest request) throws RequestAbortedException {
+    public Long startPayment(@RequestBody PaymentRequest request) throws RequestAbortedException {
         User user = userFeignClient.getUser();
 
-        paymentService.startPayment(user, request);
+        return paymentService.startPayment(user, request);
     }
 
     @PutMapping("/{paymentId}/execute")

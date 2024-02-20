@@ -14,12 +14,12 @@ public interface StockFeignClient {
     @PostMapping("/{productId}")
     void addStock(@PathVariable Long productId, @RequestBody StockRequest request);
 
-    @GetMapping("/{productId}/stock")
+    @GetMapping("/public/{productId}")
     int getStock(@PathVariable Long productId);
 
-    @PutMapping("/{productId}/restore-stock")
+    @PutMapping("/{productId}/restore")
     void restoreStock(@PathVariable Long productId, @RequestBody StockRequest request);
 
-    @PutMapping("/{productId}/reduce-stock")
+    @PutMapping("/{productId}/reduce")
     void reduceStock(@PathVariable Long productId, @RequestBody StockRequest request);
 }
