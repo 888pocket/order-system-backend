@@ -36,6 +36,10 @@ public class Payment extends AuditEntity {
         this.amount = amount;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public PaymentStatus getStatus() {
         return status;
     }
