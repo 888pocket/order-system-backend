@@ -34,11 +34,11 @@ public class Stock extends AuditEntity {
         this.initStock = initStock;
     }
 
-    public void plus(int stock) {
-        this.stock += stock;
+    public void plus(int amount) {
+        this.stock += amount;
     }
 
-    public void minus(int stock) {
-        this.stock -= stock;
+    public void minus(int amount) {
+        this.stock -= amount;
     }
 }
