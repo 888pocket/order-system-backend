@@ -1,15 +1,10 @@
-package com.joosangah.paymentservice.common.exception;
+package com.joosangah.stockservice.common.exception;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.joosangah.paymentservice.common.domain.ExceptionResponse;
-import feign.FeignException;
+import com.joosangah.stockservice.common.domain.ExceptionResponse;
 import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
-import lombok.RequiredArgsConstructor;
 import org.apache.http.impl.execchain.RequestAbortedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +15,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-@RequiredArgsConstructor
 public class GlobalExceptionHandler {
-
-    private final ObjectMapper objectMapper;
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     public ResponseEntity<Object> handleMethodArgumentNotValidException(
@@ -76,13 +68,5 @@ public class GlobalExceptionHandler {
         ExceptionResponse response = new ExceptionResponse(e.getMessage(),
                 status);
         return new ResponseEntity<>(response, status);
-    }
-
-    @ExceptionHandler(FeignException.class)
-    public ResponseEntity feignExceptionHandler(FeignException e) throws JsonProcessingException {
-        String responseJson = e.contentUTF8();
-        Map<String, String> responseMap = objectMapper.readValue(responseJson, Map.class);
-
-        return new ResponseEntity<>(responseMap, HttpStatus.valueOf(e.status()));
     }
 }

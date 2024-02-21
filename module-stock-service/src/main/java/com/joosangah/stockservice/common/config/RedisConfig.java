@@ -1,4 +1,4 @@
-package com.joosangah.productservice.common.config;
+package com.joosangah.stockservice.common.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

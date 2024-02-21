@@ -1,4 +1,4 @@
-package com.joosangah.paymentservice.common.domain;
+package com.joosangah.stockservice.common.domain;
 
 import lombok.Builder;
 import lombok.Getter;

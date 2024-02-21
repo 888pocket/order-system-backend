@@ -1,20 +1,25 @@
 package com.joosangah.productservice.service;
 
+import com.joosangah.productservice.common.client.StockFeignService;
+import com.joosangah.productservice.domain.dto.request.ProductRequest;
 import com.joosangah.productservice.domain.dto.response.ProductResponse;
 import com.joosangah.productservice.domain.entity.Product;
 import com.joosangah.productservice.mapper.ProductResponseMapper;
 import com.joosangah.productservice.repository.ProductRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.apache.http.impl.execchain.RequestAbortedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
+
+
+    private final StockFeignService stockFeignService;
 
     private final ProductRepository productRepository;
 
@@ -33,18 +38,23 @@ public class ProductService {
         return productResponseMapper.toDtoList(productRepository.findAll());
     }
 
-    @Cacheable(value = "stock", key = "#productId")
-    public int getStock(Long productId) {
-        return loadProduct(productId).getStock();
+    @Transactional
+    public Long addProduct(ProductRequest request) {
+        Product newProduct = productRepository.save(Product.builder()
+                .name(request.getName())
+                .openAt(request.getOpenAt())
+                .type(request.getType()).build());
+
+        stockFeignService.addStock(newProduct.getId(), request.getStock());
+
+        return newProduct.getId();
     }
 
-    @Transactional
-    @CachePut(value = "stock", key = "#productId")
-    public int updateStock(Long productId, int newStock) {
+    public void validateProductForPurchase(Long productId) throws RequestAbortedException {
         Product product = loadProduct(productId);
-        product.setStock(newStock);
-        productRepository.save(product);
-
-        return newStock;
+        if(product.getOpenAt() != null && product.getOpenAt()
+                .isAfter(LocalDateTime.now())) {
+            throw new RequestAbortedException("Not purchasable");
+        }
     }
 }

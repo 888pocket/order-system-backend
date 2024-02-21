@@ -1,4 +1,4 @@
-package com.joosangah.productservice.common.config;
+package com.joosangah.stockservice.common.config;
 
 import java.time.Duration;
 import org.springframework.cache.annotation.EnableCaching;
