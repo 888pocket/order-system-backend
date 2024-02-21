@@ -54,6 +54,7 @@ public class PaymentService {
         }
     }
 
+    @Transactional
     public void executePayment(User user, Long paymentId) {
         Payment payment = loadPayment(paymentId);
 
@@ -90,16 +91,11 @@ public class PaymentService {
     @Transactional
     public void failPayment(Payment payment) {
         payment.fail();
-        paymentRepository.save(payment);
-
-        // 재고 복구
-        stockFeignService.restoreStock(payment.getProductId(), payment.getAmount());
     }
 
     @Transactional
     public void successPayment(Payment payment) {
         payment.success();
-        paymentRepository.save(payment);
 
         // 재고 감소
         stockFeignService.reduceStock(payment.getProductId(), payment.getAmount());
@@ -117,6 +113,5 @@ public class PaymentService {
         stockFeignService.restoreStock(payment.getProductId(), payment.getAmount());
 
         payment.cancel();
-        paymentRepository.save(payment);
     }
 }
