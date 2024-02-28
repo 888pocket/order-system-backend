@@ -33,6 +33,19 @@
 
 ![img.png](.github/resources/img.png)
 
+- 결제 서비스
+    - products
+        - 결제에 필요한 최소 정보만 저장
+        - `type` : 예약 구매 물건인지 아닌지 String 형식으로 저장
+        - `openedAt` : 예약 구매 물건이라면 언제 오픈되는지 저장
+    - payments
+        - 동시에 여러 물건을 살 수 없다고 가정하고 product_id를 payment에 저장
+        - `status` : 결제 진입, 결제 취소, 결제 실패, 결제 완료
+- 실시간 재고 관리 서비스
+    - stocks
+        - redis cache 사용
+        - 재고 정보 저장
+
 ## 문서
 
 > - [API 명세](https://linktodocumentation)
