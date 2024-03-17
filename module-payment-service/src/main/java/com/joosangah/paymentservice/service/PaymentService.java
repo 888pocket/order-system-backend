@@ -68,7 +68,7 @@ public class PaymentService {
     }
 
     @Transactional
-    boolean tryRandomSuccess(Payment payment) {
+    public boolean tryRandomSuccess(Payment payment) {
         // 20% 확률로 실패
         if (EventTrigger.isEventTriggered(20)) {
             failPayment(payment);
