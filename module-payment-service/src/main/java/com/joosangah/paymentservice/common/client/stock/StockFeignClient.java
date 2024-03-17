@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "StockFeignClient", url = "http://stock-service:8083/stock", configuration = FeignClientConfiguration.class)
+@FeignClient(name = "STOCK-SERVICE", configuration = FeignClientConfiguration.class)
 public interface StockFeignClient {
 
-    @PostMapping("/{productId}")
+    @PostMapping("/stock/{productId}")
     void addStock(@PathVariable Long productId, @RequestBody StockRequest request);
 
-    @GetMapping("/public/{productId}")
+    @GetMapping("/stock/public/{productId}")
     int getStock(@PathVariable Long productId);
 
-    @PutMapping("/{productId}/restore")
+    @PutMapping("/stock/{productId}/restore")
     void restoreStock(@PathVariable Long productId, @RequestBody StockRequest request);
 
-    @PutMapping("/{productId}/reduce")
+    @PutMapping("/stock/{productId}/reduce")
     void reduceStock(@PathVariable Long productId, @RequestBody StockRequest request);
 }
